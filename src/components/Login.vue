@@ -75,7 +75,7 @@ export default {
         //this is where you send the responses
         this.uiState = "form submitted";
         this.axios.post(api).then((response) => {
-        console.log(response.data)
+        console.log('jo', response.data)
       })
       }
     }
