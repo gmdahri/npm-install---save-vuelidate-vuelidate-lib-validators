@@ -2,16 +2,6 @@
   <div id="app">
     <main class="formContain">
       <section>
-        <label for="fname">Name*</label>
-        <input id="fname" v-model="$v.formResponses.name.$model" type="text">
-        <p v-if="errors" class="error">
-          <span v-if="!$v.formResponses.name.required">this field is required.</span>
-          <span
-            v-if="!$v.formResponses.name.minLength"
-          >Field must have at least {{ $v.formResponses.name.$params.minLength.min }} characters.</span>
-        </p>
-      </section>
-      <section>
         <label for="femail">Email*</label>
         <input id="femail" v-model="$v.formResponses.email.$model" type="email">
         <p v-if="errors" class="error">
@@ -21,22 +11,15 @@
       </section>
       <section>
         <label for="fpass1">Password*</label>
-        <input id="fpass1" v-model="$v.formResponses.password1.$model" type="password">
+        <input id="fpass1" v-model="$v.formResponses.password.$model" type="password">
         <p v-if="errors" class="error">
-          <span v-if="!$v.formResponses.password1.required">this field is required.</span>
+          <span v-if="!$v.formResponses.password.required">this field is required.</span>
           <span
-            v-if="!$v.formResponses.password1.strongPassword"
+            v-if="!$v.formResponses.password.strongPassword"
           >Strong passwords need to have a letter, a number, a special character, and be more than 8 characters long.</span>
         </p>
       </section>
-      <section>
-        <label for="fpass2">Please re-type your Password</label>
-        <input id="fpass2" v-model="$v.formResponses.password2.$model" type="password">
-        <p v-if="errors" class="error">
-          <span v-if="!$v.formResponses.password2.required">this field is required.</span>
-          <span v-if="!$v.formResponses.password2.sameAsPassword">The passwords do not match.</span>
-        </p>
-      </section>
+      
       <section>
         <button @click.prevent="submitForm" class="submit">Submit</button>
         <p v-if="errors" class="error">The form above has errors,
@@ -52,7 +35,7 @@
 </template>
 
 <script>
-import { required, minLength, email, sameAs } from "vuelidate/lib/validators";
+import { required,  email, } from "vuelidate/lib/validators";
 
 export default {
   data() {
@@ -61,38 +44,26 @@ export default {
       errors: false,
       empty: true,
       formResponses: {
-        name: null,
         email: null,
-        password1: null,
-        password2: null
+        password: null
       }
     };
   },
   validations: {
     formResponses: {
-      name: {
-        required,
-        minLength: minLength(2)
-      },
       email: {
         required,
         email
       },
-      password1: {
+      password: {
         required,
-        strongPassword(password1) {
+        // password,
+        strongPassword(password) {
           return (
-            /[a-z]/.test(password1) && //checks for a-z
-            /[0-9]/.test(password1) && //checks for 0-9
-            /\W|_/.test(password1) && //checks for special char
-            password1.length >= 8
+            password.length >= 3
           );
         }
       },
-      password2: {
-        required,
-        sameAsPassword: sameAs("password1")
-      }
     }
   },
   methods: {
@@ -103,6 +74,9 @@ export default {
       if (this.errors === false && this.empty === false) {
         //this is where you send the responses
         this.uiState = "form submitted";
+        this.axios.post(api).then((response) => {
+        console.log(response.data)
+      })
       }
     }
   }

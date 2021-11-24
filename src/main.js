@@ -6,6 +6,10 @@ import * as VeeValidate from 'vee-validate'
 // import {BootstrapVue, FormPlugin} from "bootstrap-vue";
 
 import Vuelidate from "vuelidate";
+import axios from 'axios'
+import VueAxios from 'vue-axios'
+
+Vue.use(VueAxios, axios)
 
 Vue.use(Vuelidate);
 Vue.config.productionTip = false;
