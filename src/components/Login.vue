@@ -43,6 +43,7 @@ export default {
       uiState: "submit not clicked",
       errors: false,
       empty: true,
+      token: null,
       formResponses: {
         email: null,
         password: null
@@ -73,10 +74,21 @@ export default {
       this.uiState = "submit clicked";
       if (this.errors === false && this.empty === false) {
         //this is where you send the responses
+        console.warn('email', this.formResponses.email, 'pass', this.formResponses.password);
+        this.axios.post('http://localhost:8081/hello/login', this.formResponses)
+        .then((response) => {
+        this.token = response.data;
+        if(response.data!=""){
+        console.warn('jo', response.data);
+        console.warn('token: ', this.token);
         this.uiState = "form submitted";
-        this.axios.post(api).then((response) => {
-        console.log('jo', response.data)
+        }
+        else{
+            alert('please Enter correct Email/password');
+        }
       })
+
+      
       }
     }
   }
